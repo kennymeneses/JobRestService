@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "hgVsWIdGedoaOURK44vzGUs76YWSyNA6yea1uoChzuc=",
+  "Source": "JobRestService",
+  "BasePath": "_content/JobRestService",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
