@@ -1,6 +1,5 @@
 ﻿using JobRestService.Manager;
 using JobRestService.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobRestService.Controllers
