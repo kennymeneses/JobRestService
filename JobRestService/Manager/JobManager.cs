@@ -13,6 +13,7 @@ namespace JobRestService.Manager
         private readonly string tableName;
         private readonly string ServiceBusConnectionString;
         private readonly string queueName;
+        string jobid;
 
         public JobManager(IConfiguration _configuration)
         {
@@ -23,6 +24,8 @@ namespace JobRestService.Manager
 
             ServiceBusConnectionString = configuration["ServiceBus:ConnectionString"];
             queueName = configuration["ServiceBus:QueueName"];
+
+            jobid = Guid.NewGuid().ToString();
         }
 
         public async Task<IncomingMessage> StoreMessage(Job job)
@@ -30,11 +33,15 @@ namespace JobRestService.Manager
             // Todo: convert job arguments in a string type 
             try
             {
+                
+
                 var incomingMsg = new IncomingMessage(job.name, 
                                                       job.process, 
                                                       job.earliestStart, 
                                                       job.latestStart,
                                                       "");
+
+                incomingMsg.RowKey = jobid;
 
                 var storageAccount = CloudStorageAccount.Parse(TableStorageConnectionString);
                 var tableClient = storageAccount.CreateCloudTableClient();
@@ -54,11 +61,15 @@ namespace JobRestService.Manager
         {
             try
             {
+                DateTime earliestStart = DateTime.Now.AddMinutes(2);
+                DateTime latestStart = DateTime.Now.AddMinutes(5);
+
                 var serviceBusClient = new ServiceBusClient(ServiceBusConnectionString);
+                var queueMessage = new QueueMessage(job.name, job.process, earliestStart, latestStart, job.arguments, jobid);
+
 
                 ServiceBusSender serviceBusSender = serviceBusClient.CreateSender(queueName);
-
-                string serviceBusMessage = JsonSerializer.Serialize(job);
+                string serviceBusMessage = JsonSerializer.Serialize(queueMessage);
                 await serviceBusSender.SendMessageAsync(new ServiceBusMessage(serviceBusMessage));
             }
             catch (Exception)

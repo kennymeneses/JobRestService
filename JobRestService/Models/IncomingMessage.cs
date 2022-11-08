@@ -13,7 +13,6 @@ namespace JobRestService.Models
         public IncomingMessage(string _name, int _process, DateTime? _earliestStart, DateTime _latestStart, string _arguments)
         {
             this.PartitionKey = _process.ToString();
-            this.RowKey = Guid.NewGuid().ToString();
             name = _name;
             process = _process;
             earliestStart = _earliestStart;
