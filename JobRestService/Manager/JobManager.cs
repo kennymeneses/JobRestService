@@ -36,8 +36,8 @@ namespace JobRestService.Manager
                 
 
                 var incomingMsg = new IncomingMessage(job.name, 
-                                                      job.process, 
-                                                      job.earliestStart, 
+                                                      job.process,
+                                                      job.earliestStart,
                                                       job.latestStart,
                                                       "");
 
@@ -53,7 +53,7 @@ namespace JobRestService.Manager
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }            
         }
 
@@ -61,12 +61,12 @@ namespace JobRestService.Manager
         {
             try
             {
-                DateTime earliestStart = DateTime.Now.AddMinutes(2);
-                DateTime latestStart = DateTime.Now.AddMinutes(5);
+                DateTime earliestStart = DateTime.Now;
 
+                DateTime latestStart = DateTime.Now.AddMinutes(6);
+                
                 var serviceBusClient = new ServiceBusClient(ServiceBusConnectionString);
                 var queueMessage = new QueueMessage(job.name, job.process, earliestStart, latestStart, job.arguments, jobid);
-
 
                 ServiceBusSender serviceBusSender = serviceBusClient.CreateSender(queueName);
                 string serviceBusMessage = JsonSerializer.Serialize(queueMessage);
